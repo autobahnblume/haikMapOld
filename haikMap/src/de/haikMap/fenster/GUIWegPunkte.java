@@ -3,6 +3,9 @@ package de.haikMap.fenster;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import de.haikMap.listener.ButtonListener;
+
 import javax.swing.JLabel;
 
 import java.awt.Color;
@@ -28,6 +31,7 @@ public class GUIWegPunkte extends JFrame {
 	private JTextField txtLaengengrad;
 	private JPanel wegPunktPanel;
 	private JPanel scrollPanel;
+	private ActionListener btnListener;
 
 	
 	/**
@@ -40,9 +44,12 @@ public class GUIWegPunkte extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 564, 448);
 		
+		btnListener = new ButtonListener(this);
+		
 		ActionListener aListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nachtragPanel();
+				JLabel addetWegPkt = new JLabel(txtNameWegpkt.getText());
+				nachtragPanel(addetWegPkt, wegPunktPanel);
 			}
 		};
 		
@@ -132,7 +139,7 @@ public class GUIWegPunkte extends JFrame {
 		txtLaengengrad.setColumns(10);
 		
 		JButton btnZeigen = new JButton("Zeigen");
-		btnZeigen.addActionListener(aListener);
+		btnZeigen.addActionListener(btnListener);
 		sl_festesPanel.putConstraint(SpringLayout.NORTH, btnZeigen, 24, SpringLayout.SOUTH, breitengradPanel);
 		sl_festesPanel.putConstraint(SpringLayout.WEST, btnZeigen, 10, SpringLayout.WEST, festesPanel);
 		sl_festesPanel.putConstraint(SpringLayout.SOUTH, btnZeigen, 66, SpringLayout.SOUTH, breitengradPanel);
@@ -188,7 +195,7 @@ public class GUIWegPunkte extends JFrame {
 	
 	
 
-	/* Trägt ein Neues JLabel in den JPanel ein.
+	/** Trägt ein Neues JLabel in den JPanel ein.
 	 * 
 	 */
 	protected void nachtragPanel() {
@@ -200,11 +207,12 @@ public class GUIWegPunkte extends JFrame {
 		this.validate();
 		wegPunktPanel.repaint();
 	}
+	
 	/**Trägt ein Neues JLabel in den JPanel ein.
-	 * @param label
-	 * @param panel
+	 * @param label - Das JLabel was in den JPanel soll 
+	 * @param panel - Das JPanel wo die JLabel eingefügt wird
 	 */
-	protected void nachtragPanel(JLabel label, JPanel panel) {
+	public void nachtragPanel(JLabel label, JPanel panel) {
 		nächste += 15;
 		label.setBounds(0, nächste, 100, 14);
 		scrollPanel.setPreferredSize(new Dimension(10, nächste));
@@ -224,6 +232,38 @@ public class GUIWegPunkte extends JFrame {
 		panel.add(label);
 		this.validate();
 		panel.repaint();
+	}
+
+	public JTextField getTxtNameWegpkt() {
+		return txtNameWegpkt;
+	}
+
+	public void setTxtNameWegpkt(JTextField txtNameWegpkt) {
+		this.txtNameWegpkt = txtNameWegpkt;
+	}
+
+	public JTextField getTxtBreitengrad() {
+		return txtBreitengrad;
+	}
+
+	public void setTxtBreitengrad(JTextField txtBreitengrad) {
+		this.txtBreitengrad = txtBreitengrad;
+	}
+
+	public JTextField getTxtLaengengrad() {
+		return txtLaengengrad;
+	}
+
+	public void setTxtLaengengrad(JTextField txtLaengengrad) {
+		this.txtLaengengrad = txtLaengengrad;
+	}
+
+	public JPanel getWegPunktPanel() {
+		return wegPunktPanel;
+	}
+
+	public void setWegPunktPanel(JPanel wegPunktPanel) {
+		this.wegPunktPanel = wegPunktPanel;
 	}
 	
 }
