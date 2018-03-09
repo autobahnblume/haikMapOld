@@ -96,5 +96,9 @@ public class Karte {
 	public ArrayList<DefaultTileFactory> getFactories() {
 		return factories;
 	}
+	
+	public void gehZu(GeoPosition pos) {
+		mapViewer.setAddressLocation(pos);
+	}
 
 }

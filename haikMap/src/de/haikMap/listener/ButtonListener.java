@@ -2,30 +2,31 @@ package de.haikMap.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import de.haikMap.fenster.GUIWegPunkte;
+import de.haikMap.fenster.WegPunkteFenster;
+import de.haikMap.steuerung.WegpktControll;
 
 /**Der Listener kümmert sich um die actionen der Buttons
  * Button:
  * - Zeigen
  * - Speichern
- * @author mkenkel
+ * @author autobahnblume
  *
  */
-public class ButtonListener implements ActionListener {
+public class ButtonListener implements ActionListener{
 
-	private JTextField addetTxtWegPkt;
-	private JPanel wegPunktPanel;
-	private GUIWegPunkte tempGuiWegPunkte;
+	private WegpktControll wegPktControll;
 
-	public ButtonListener(GUIWegPunkte guiWegPunkte) {
-		tempGuiWegPunkte = guiWegPunkte;
-		addetTxtWegPkt = guiWegPunkte.getTxtNameWegpkt();
-		wegPunktPanel = guiWegPunkte.getWegPunktPanel();
+	/**
+	 * @param wegPunkteFenster
+	 */
+	public ButtonListener(WegpktControll wegPktControll) {
+		this.wegPktControll = wegPktControll;
 	}
 	
 	/* (nicht-Javadoc)
@@ -33,9 +34,16 @@ public class ButtonListener implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JLabel addetWegPkt = new JLabel(addetTxtWegPkt.getText());
-		tempGuiWegPunkte.nachtragPanel(addetWegPkt, wegPunktPanel);
-	}
+		switch (e.getActionCommand()) {
+		case "Zeigen":
+			wegPktControll.zeigWegPkt();
+			break;
+		case "Speichern":
+			wegPktControll.nachtragWegPktLabel();
 
+		default:
+			break;
+		}
+	}
 	
 }
