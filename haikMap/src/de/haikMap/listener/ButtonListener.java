@@ -2,13 +2,7 @@ package de.haikMap.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
-
-import de.haikMap.fenster.WegPunkteFenster;
 import de.haikMap.steuerung.WegpktControll;
 
 /**Der Listener kümmert sich um die actionen der Buttons

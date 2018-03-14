@@ -2,10 +2,8 @@ package de.haikMap.listener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
 import de.haikMap.steuerung.WegpktControll;
 import de.haikMap.wegPkt.WegPkt;

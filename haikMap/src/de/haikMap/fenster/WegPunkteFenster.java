@@ -16,6 +16,7 @@ import javax.swing.SpringLayout;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
 /**https://dbs.cs.uni-duesseldorf.de/lehre/docs/java/javabuch/html/k100241.html
  * http://openbook.rheinwerk-verlag.de/javainsel9/javainsel_19_010.htm#mj66f472599b8b53fe93ea7adde5f179c3
@@ -42,10 +43,11 @@ public class WegPunkteFenster extends JFrame {
 	public WegPunkteFenster() {
 		/**Unnötig???
 		setLocation(new Point(1200, 900));*/
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\mkenkel\\OneDrive\\AutoBahnBlume.png"));
 		setMinimumSize(new Dimension(560, 360));
 		setTitle("WegPunkte");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 564, 448); // setz die Position
+		setBounds(850, 10, 564, 448); // setz die Position
 
 		greateGrundPanel();	
 	}

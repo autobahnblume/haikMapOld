@@ -5,6 +5,7 @@ package de.haikMap.steuerung;
 import javax.swing.event.MouseInputListener;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -14,6 +15,9 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.WaypointPainter;
+
+import de.haikMap.wegPkt.WegPkt;
 
 
 /**Die Klasse erzeugt ein OpenStreetMap-Objekt, das eine OSM-Karte zuverfühgung stellt.
@@ -97,8 +101,19 @@ public class Karte {
 		return factories;
 	}
 	
+	/**Setz eine neue GeoPosition und zentiert dort drauf
+	 * @param pos - GeoPosition - neue GeoPosition
+	 */
 	public void gehZu(GeoPosition pos) {
 		mapViewer.setAddressLocation(pos);
+	}
+	
+	public void zeichneWegPkt(Set<WegPkt> wegPktSet) {
+		// Create a waypoint painter that takes all the waypoints
+		WaypointPainter<WegPkt> waypointPainter = new WaypointPainter<WegPkt>();
+		waypointPainter.setWaypoints(wegPktSet);
+		
+		mapViewer.setOverlayPainter(waypointPainter);
 	}
 
 }
