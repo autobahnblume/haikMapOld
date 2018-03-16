@@ -30,11 +30,13 @@ public class Karte {
 	
 	private JXMapViewer mapViewer;
 	private GeoPosition kartenStartPkt;
+	private GeoPosition mausKlickPkt;
 	private ArrayList<DefaultTileFactory> factories;
 	
 	public Karte() {
 		mapViewer = new JXMapViewer();
 		kartenStartPkt = new  GeoPosition(57.006163, 16.218952);
+		mausKlickPkt = null;
 		initKarte();
 	}
 	
@@ -81,7 +83,6 @@ public class Karte {
 		MouseInputListener mia = new PanMouseInputListener(mapViewer);
 		mapViewer.addMouseListener(mia);
 		mapViewer.addMouseMotionListener(mia);
-		
 		mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mapViewer));
 	}
 	
@@ -105,7 +106,8 @@ public class Karte {
 	 * @param pos - GeoPosition - neue GeoPosition
 	 */
 	public void gehZu(GeoPosition pos) {
-		mapViewer.setAddressLocation(pos);
+//		mapViewer.setAddressLocation(pos);
+		mapViewer.setCenterPosition(pos);
 	}
 	
 	public void zeichneWegPkt(Set<WegPkt> wegPktSet) {
@@ -114,6 +116,14 @@ public class Karte {
 		waypointPainter.setWaypoints(wegPktSet);
 		
 		mapViewer.setOverlayPainter(waypointPainter);
+	}
+
+	public GeoPosition getMausKlickPkt() {
+		return mausKlickPkt;
+	}
+
+	public void setMausKlickPkt(GeoPosition mausKlickPkt) {
+		this.mausKlickPkt = mausKlickPkt;
 	}
 
 }

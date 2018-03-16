@@ -14,10 +14,10 @@ import de.haikMap.wegPkt.WegPkt;
  */
 public class WegPktListener extends MouseAdapter {
 
-	private WegPkt wegPkt;
+//	private WegPkt wegPkt;
 	
 	public WegPktListener(WegpktControll wegPktControll) {
-		this.wegPkt = wegPkt;
+//		this.wegPkt = wegPkt;
 	}
 	
 	@Override

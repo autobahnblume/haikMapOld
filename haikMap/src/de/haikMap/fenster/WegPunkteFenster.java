@@ -36,6 +36,7 @@ public class WegPunkteFenster extends JFrame {
 
 	private JButton btnSpeichern;
 	private JButton btnZeigen;
+	private JButton btnReset;
 	
 	/**
 	 * Create the frame.
@@ -122,8 +123,9 @@ public class WegPunkteFenster extends JFrame {
 		createPanalNameWegpkt(festesPanel, layoutFestPanel);
 		createPanelBreitengrad(festesPanel, layoutFestPanel);
 		createPanelLaengengrad(layoutFestPanel, festesPanel);
-		createBtnZeigen(festesPanel, layoutFestPanel);
-		createBtnSpeichern(festesPanel, layoutFestPanel);
+		createAllBtn(festesPanel, layoutFestPanel);
+//		createBtnZeigen(festesPanel, layoutFestPanel);
+//		createBtnSpeichern(festesPanel, layoutFestPanel);
 //-----------------------------------------------------------------		
 		
 	}
@@ -233,33 +235,20 @@ public class WegPunkteFenster extends JFrame {
 	private void createTxtLaengengrad(JPanel laengengradPanel, SpringLayout sl_laengengradPanel) {
 		txtLaengengrad = new JTextField();
 		setzPosComponent(txtLaengengrad, panelPosision(19, -5, -20, 0), laengengradPanel, sl_laengengradPanel);
-//		laengengradPanel.add(txtLaengengrad);
 		txtLaengengrad.setColumns(10);
 	}
 
-	/**
-	 * @param sl_festesPanel
-	 * @param nameWegpktPanel
-	 * @param breitengradPanel
-	 * @return
-	 */
-	private void createBtnZeigen(JPanel festPanel, SpringLayout sl_festesPanel) {
-		btnZeigen = new JButton("Zeigen");
-		setzPosComponent(btnZeigen, panelPosision(170, -10, -186, 10), festPanel, sl_festesPanel);
-//		festPanel.add(btnZeigen);
+	private void createAllBtn(JPanel festesPanel, SpringLayout layoutFestPanel) {
+		btnZeigen = createBtn("Zeigen", 		panelPosision(170, -10, -186, 10), festesPanel, layoutFestPanel);
+		btnSpeichern = createBtn("Speichern", 	panelPosision(235, -10, -121, 10), festesPanel, layoutFestPanel);
+		btnReset = createBtn("Rest", 			panelPosision(290, -10, -67, 10), festesPanel, layoutFestPanel);
+	}
+	private JButton createBtn(String name,int[] panelPosision, JPanel festPanel, SpringLayout sl_festesPanel) {
+		JButton tempZeigen = new JButton(name);
+		setzPosComponent(tempZeigen, panelPosision, festPanel, sl_festesPanel);
+		return tempZeigen;
 	}
 
-	/**
-	 *@param sl_festesPanel
-	 * @param nameWegpktPanel
-	 * @param btnZeigen
-	 * @return - JButton
-	 */
-	private void createBtnSpeichern(JPanel festPanel, SpringLayout sl_festesPanel) {
-		btnSpeichern = new JButton("Speichern");
-		setzPosComponent(btnSpeichern, panelPosision(235, -10, -121, 10), festPanel, sl_festesPanel);
-//		festPanel.add(btnSpeichern);
-	}
 	
 
 	/**

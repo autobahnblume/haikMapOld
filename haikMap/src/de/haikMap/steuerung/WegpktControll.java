@@ -7,11 +7,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
 import de.haikMap.fenster.WegPunkteFenster;
 import de.haikMap.listener.ButtonListener;
+import de.haikMap.listener.MausKlickListener;
 import de.haikMap.listener.WegPktListener;
 import de.haikMap.wegPkt.WegPkt;
 
@@ -54,7 +56,16 @@ public class WegpktControll {
 		wegPktSpeicher = new WegPktSpeicherung();
 		
 		addBtnListener();	
+		addKartenListener();
 		wegPktFenster.setVisible(true);
+	}
+
+	private void addKartenListener() {
+//		MausKlickListener mausL = new MausKlickListener(map);
+		MausKlickListener mausL = new MausKlickListener(this);
+		map.getJXMapViewer().addMouseListener(mausL);
+		// TODO Automatisch generierter Methodenstub
+		
 	}
 
 	/**Bindet die Buttons des WegPunkteFenster-Objekt an die
@@ -66,11 +77,26 @@ public class WegpktControll {
 		wegPktFenster.setVisible(true);
 	}
 
+	/**übergibt die GeoPos dermaus an die 
+	 * passenden TextPanel des WegPktFenster-Objektes 
+	 * 
+	 * @param mausPos - GeoPosition - Posistion der Maus
+	 */
+	public void zeigMausPosImWegPktFenster(GeoPosition mausPos){
+		wegPktFenster.getTxtBreitengrad().setText("" + mausPos.getLatitude());
+		wegPktFenster.getTxtLaengengrad().setText("" + mausPos.getLongitude());
+	}
+	
+	public JXMapViewer getJXMapViewer() {
+		return map.getJXMapViewer();
+		
+	}
+	
 	/**Trägt ein Neues JLabel in den JPanel ein.
 	 * @param addetWegPkt
 	 * @param WegPunktPane
 	 */
-	public void nachtragWegPktLabel() {
+ 	public void nachtragWegPktLabel() {
 //		String wegPktName = wegPktFenster.getTxtNameWegpkt().getText() +" ";
 //		double wegPktBreitengrad = checkEingabePosition(wegPktFenster.getTxtBreitengrad().getText(),this.BREITENGRAD);
 //		double wegPktLaengengrad = checkEingabePosition(wegPktFenster.getTxtLaengengrad().getText(),this.BREITENGRAD);
