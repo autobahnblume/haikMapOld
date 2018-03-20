@@ -76,7 +76,7 @@ public class KartenFenster extends JFrame {
 	private void initFenster() {
 		this.setSize(800, 600);
 		this.setLocation(10, 10);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setVisible(true);
 	}
 

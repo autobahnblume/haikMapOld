@@ -6,24 +6,23 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 
 import de.haikMap.steuerung.WegpktControll;
-import de.haikMap.wegPkt.WegPkt;
 
 /**
  * @author AutoBahnBlume
  *
  */
-public class WegPktListener extends MouseAdapter {
+public class WegPktLabelListener extends MouseAdapter {
 
-//	private WegPkt wegPkt;
+	private WegpktControll wegPktControll;
 	
-	public WegPktListener(WegpktControll wegPktControll) {
-//		this.wegPkt = wegPkt;
+	public WegPktLabelListener(WegpktControll wegPktControll) {
+		this.wegPktControll = wegPktControll;
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JLabel wegPkt = (JLabel) e.getComponent();
-		System.out.println(wegPkt.getText());
+		JLabel wegPktLabel = (JLabel) e.getComponent();
+		wegPktControll.darstellWegPkt(wegPktLabel);
 //		JOptionPane.showMessageDialog(null, "WegPkt geklickt", null, 0, wegPkt.getWegPktBild());
 		
 	}

@@ -1,5 +1,6 @@
 package de.haikMap.steuerung;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,10 +12,10 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.Waypoint;
 
-import de.haikMap.fenster.WegPunkteFenster;
+import de.haikMap.fenster.WegPktFenster;
 import de.haikMap.listener.ButtonListener;
 import de.haikMap.listener.MausKlickListener;
-import de.haikMap.listener.WegPktListener;
+import de.haikMap.listener.WegPktLabelListener;
 import de.haikMap.wegPkt.WegPkt;
 
 /**Koordiert im größenteils die komunikation zwischen 
@@ -29,10 +30,10 @@ public class WegpktControll {
 	private final String LAENENGRAD = "LängenGrad";
 	
 	private ButtonListener btnListener = null;
-	private WegPunkteFenster wegPktFenster = null;
+	private WegPktFenster wegPktFenster = null;
 	private Karte map = null;
 	private int abstandLabel = -15;
-	private WegPktListener wegPktListener;
+	private WegPktLabelListener wegPktListener;
 	// Create waypoints from the geo-positions
 	private Set<Waypoint> waypoints = null;
 	private WegPktSpeicherung wegPktSpeicher;
@@ -48,24 +49,45 @@ public class WegpktControll {
 	 */
  	public WegpktControll(Karte map) {
 		super();
-		this.wegPktFenster = new WegPunkteFenster();
+		this.wegPktFenster = new WegPktFenster();
 		this.btnListener = new ButtonListener(this);
-		this.wegPktListener = new WegPktListener(this);
+		this.wegPktListener = new WegPktLabelListener(this);
 		this.map = map;
 		this.waypoints = new HashSet<Waypoint>();
 		wegPktSpeicher = new WegPktSpeicherung();
 		
 		addBtnListener();	
 		addKartenListener();
-		wegPktFenster.setVisible(true);
+		setVisibleWegPktFenster(true);
 	}
-
+ 	
+ 	/**Setz setVisible von WegPktFenster-Objekt auch true oder false
+ 	 * @param zeigen - boolean - Ob Das WegPkt-Fenster angezeigt werden soll oder nicht
+ 	 */
+ 	public void setVisibleWegPktFenster(boolean zeigen) {
+ 		wegPktFenster.setVisible(zeigen);
+ 	}
+ 	
+//TODO weiter machen
+ 	public void delWegPkt() {
+ 		String name = wegPktFenster.getName();
+ 		double breitenGrad = Double.parseDouble(wegPktFenster.getTxtBreitengrad().getText());
+ 		double laengenGrad = Double.parseDouble(wegPktFenster.getTxtLaengengrad().getText());
+ 		GeoPosition geoPos = new GeoPosition(breitenGrad, laengenGrad);
+ 		WegPkt delWegPkt = new WegPkt(name, geoPos);
+ 		wegPktSpeicher.delWegPkt(delWegPkt);
+ 	}
+ 	
+ 	//TODO kommentieren
+ 	public void loadWegPkte() {
+ 		wegPktSpeicher.loadArrayWegpkt();
+ 		lodeWegPktPanel();
+		map.zeichneWegPkt(wegPktSpeicher.getWegPktSet());
+ 	}
+ 	//TODO Kommentieren
 	private void addKartenListener() {
-//		MausKlickListener mausL = new MausKlickListener(map);
 		MausKlickListener mausL = new MausKlickListener(this);
 		map.getJXMapViewer().addMouseListener(mausL);
-		// TODO Automatisch generierter Methodenstub
-		
 	}
 
 	/**Bindet die Buttons des WegPunkteFenster-Objekt an die
@@ -73,18 +95,42 @@ public class WegpktControll {
 	 */
 	private void addBtnListener() {
 		wegPktFenster.getBtnSpeichern().addActionListener(btnListener);
-		wegPktFenster.getBtnZeigen().addActionListener(btnListener);		
+		wegPktFenster.getBtnZeigen().addActionListener(btnListener);
+		wegPktFenster.getBtnReset().addActionListener(btnListener);	
+		wegPktFenster.getBtnLaden().addActionListener(btnListener);		
 		wegPktFenster.setVisible(true);
 	}
 
-	/**übergibt die GeoPos dermaus an die 
-	 * passenden TextPanel des WegPktFenster-Objektes 
+	public void setAllTxtFieldText(String name, GeoPosition geoPos) {
+		String breitengrad = "" + geoPos.getLatitude();
+		String laengengrad = "" + geoPos.getLongitude();
+		wegPktFenster.setAllTxtFieldText(name, breitengrad, laengengrad);
+	}
+	
+	/**
 	 * 
 	 * @param mausPos - GeoPosition - Posistion der Maus
 	 */
-	public void zeigMausPosImWegPktFenster(GeoPosition mausPos){
-		wegPktFenster.getTxtBreitengrad().setText("" + mausPos.getLatitude());
-		wegPktFenster.getTxtLaengengrad().setText("" + mausPos.getLongitude());
+	public void darstellenMausPosImWegPktFenster(GeoPosition mausPos){
+		setAllTxtFieldText("", mausPos);
+	}
+	
+	public void darstellWegPkt(WegPkt showWegPkt) {
+		setAllTxtFieldText("MausPosTemp", showWegPkt.getGeoPos());
+		System.out.println("--------> darstellWegPkt");
+	}
+	
+	public void darstellWegPkt(JLabel showWegPktLabel) {
+		if(wegPktSpeicher.isWegPktLabelImArray(showWegPktLabel) != -1) {
+			WegPkt showWegPkt = wegPktSpeicher.getWegPkt(showWegPktLabel);
+			setAllTxtFieldText(showWegPkt.getName(), showWegPkt.getGeoPos());
+		}else {
+			System.out.println("darstellWegPkt: WegPktLabel nicht im Array");
+		}
+	}
+	
+	public WegPkt getWeg(int indexWegPkt) {
+		return wegPktSpeicher.getWegPkt(indexWegPkt);
 	}
 	
 	public JXMapViewer getJXMapViewer() {
@@ -97,32 +143,49 @@ public class WegpktControll {
 	 * @param WegPunktPane
 	 */
  	public void nachtragWegPktLabel() {
-//		String wegPktName = wegPktFenster.getTxtNameWegpkt().getText() +" ";
-//		double wegPktBreitengrad = checkEingabePosition(wegPktFenster.getTxtBreitengrad().getText(),this.BREITENGRAD);
-//		double wegPktLaengengrad = checkEingabePosition(wegPktFenster.getTxtLaengengrad().getText(),this.BREITENGRAD);
-//		JLabel addetWegPkt = new JLabel(wegPktName);
 		WegPkt saveWegPkt = createWegPkt();
+		
 		System.out.println("nachtragWegPktLabel " + wegPktSpeicher.isWegPktImArray(saveWegPkt));
+		
 		if( wegPktSpeicher.isWegPktImArray(saveWegPkt) == -1) {
-			JLabel addetWegPkt = new JLabel(saveWegPkt.getName());
-			
-			String toolTipText = null;
-			toolTipText = "Breitengrad: "+ saveWegPkt.getGeoPos().getLatitude();
-			toolTipText +=  " Längengrad: "+ saveWegPkt.getGeoPos().getLongitude();
-			addetWegPkt.setToolTipText(toolTipText);
+			JLabel addetWegPktLabel = saveWegPkt.getWegPktLabel();
+			saveWegPkt.setToolTipText();
 			
 			abstandLabel += 16;
-			addetWegPkt.setBounds(0, abstandLabel, 270, 14);
+			addetWegPktLabel.setBounds(0, abstandLabel, 270, 14);
 //			addetWegPkt.setBorder(new LineBorder(new Color(0, 0, 0)));
-			addetWegPkt.addMouseListener(wegPktListener);
+			addetWegPktLabel.addMouseListener(wegPktListener);
 			
 			JPanel wegPktContanerPanel = wegPktFenster.getWegPunktPanel();
-			wegPktContanerPanel.add(addetWegPkt);
+			wegPktContanerPanel.add(addetWegPktLabel);
 			wegPktContanerPanel.repaint();
+			
 			wegPktFenster.validate();
 		}
 			setzWegPkt(saveWegPkt);
 	}
+ 	
+ 	public void lodeWegPktPanel() {
+ 		ArrayList<WegPkt> tempWegPktList = wegPktSpeicher.getWegPktArrayList();
+ 		for (WegPkt tempWegPkt : tempWegPktList) {
+			JLabel addetWegPktLabel = tempWegPkt.getWegPktLabel();
+			tempWegPkt.setToolTipText();
+			abstandLabel += 16;
+			addetWegPktLabel.setBounds(0, abstandLabel, 270, 14);
+//		addetWegPkt.setBorder(new LineBorder(new Color(0, 0, 0)));
+			addetWegPktLabel.addMouseListener(wegPktListener);
+		
+			JPanel wegPktContanerPanel = wegPktFenster.getWegPunktPanel();
+			wegPktContanerPanel.add(addetWegPktLabel);
+			wegPktContanerPanel.repaint();
+		
+			wegPktFenster.validate();
+		}
+ 		
+		
+		
+		
+ 	}
 	
 	/**Checkt die eingabe vom Längengrad und Breitengrad
 	 * und zentriert die karte auf den Punkt 
@@ -201,7 +264,7 @@ public class WegpktControll {
 			
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, msg + " Hat kein gültigenWert und wird deshalb auf 0 gesetzt");
-			System.out.println(zuCheckenStr);
+			
 			return 0;
 		}catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(null, msg + " Ist Leer und wird  deshalb auf 0 gesetzt");
@@ -210,10 +273,10 @@ public class WegpktControll {
 		
 	}
 
-	private WegPkt getWegPkt(int index) {
-		WegPkt wegPkt = wegPktSpeicher.getWegPkt(index);
-		return wegPkt;
-	}
+//	private WegPkt getWegPkt(int index) {
+//		WegPkt wegPkt = wegPktSpeicher.getWegPkt(index);
+//		return wegPkt;
+//	}
 	
 	
 	/**Übergibt den Wert der Eigenschaft
@@ -230,5 +293,17 @@ public class WegpktControll {
 	public void setWaypoints(Set<Waypoint> waypoints) {
 		this.waypoints = waypoints;
 	}
-	
+
+	/**Gibt die GeoPosition der Maus an die 
+	 * darstellenMausPosImWegPktFenster(GeoPosition)-Methode weiter
+	 * 
+	 * @param mausGeoPos - GeoPosition - Die GeoPosition der Maus
+	 */
+	public void speicherMausPosition(GeoPosition mausGeoPos) {
+		darstellenMausPosImWegPktFenster(mausGeoPos);
+	}
+
+	public void speichernArray() {
+		wegPktSpeicher.speichernArray();
+	}
 }

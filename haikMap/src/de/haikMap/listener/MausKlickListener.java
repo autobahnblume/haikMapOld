@@ -8,10 +8,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.input.MapClickListener;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import de.haikMap.steuerung.Karte;
 import de.haikMap.steuerung.WegpktControll;
 
 public class MausKlickListener extends MouseAdapter {

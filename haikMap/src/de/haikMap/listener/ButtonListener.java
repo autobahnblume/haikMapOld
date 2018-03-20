@@ -1,7 +1,10 @@
 package de.haikMap.listener;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 
 import de.haikMap.steuerung.WegpktControll;
 
@@ -34,8 +37,18 @@ public class ButtonListener implements ActionListener{
 			break;
 		case "Speichern":
 			wegPktControll.nachtragWegPktLabel();
+			wegPktControll.speichernArray();
+			break;
+		case "Laden":
+			wegPktControll.loadWegPkte();
+			break;
+		case "Reset":
+			wegPktControll.delWegPkt();
+			break;
 
 		default:
+			System.out.println(e.getSource());
+			wegPktControll.setVisibleWegPktFenster(true);
 			break;
 		}
 	}
